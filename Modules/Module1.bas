@@ -279,9 +279,10 @@ Public Function FindLastRowInSheet(ws) As Long
     ' based on https://stackoverflow.com/a/11169920
     Dim lastRow As Long
     
+    Debug.Print ("FindLastRowInSheet(" & ws.Name & ")")
+    
     With ws
         If Application.WorksheetFunction.CountA(.Cells) <> 0 Then
-            Debug.Print ("CountA(.Cells) <> 0")
             lastRow = .Cells.Find(What:="*", _
                 After:=.Range("A1"), _
                 Lookat:=xlPart, _
@@ -289,8 +290,9 @@ Public Function FindLastRowInSheet(ws) As Long
                 SearchOrder:=xlByRows, _
                 SearchDirection:=xlPrevious, _
                 MatchCase:=False).Row
+            Debug.Print ("Last row in " & ws.Name & " = " & lastRow)
         Else
-            Debug.Print ("CountA(.Cells) = 0")
+            Debug.Print ("Worksheet " & ws.Name & " has no rows! Setting lastRow = 1")
             lastRow = 1
         End If
     End With
@@ -523,7 +525,6 @@ End Sub
 
 Sub GenerateEmployeeList()
     Debug.Print ("GenerateEmployeeList(): Start.")
-    Debug.Print ("Initializing Variables.")
     Dim wsAppointed As Worksheet, wsHourly As Worksheet, wsEJC As Worksheet
     Dim lastRowAppointed As Long, lastRowHourly As Long, lastRowEJC As Long
     Dim emplColAppointed As Integer, emplColHourly As Integer, emplColEJC As Integer
@@ -549,19 +550,17 @@ Sub GenerateEmployeeList()
     jobcodeEJC = FindColumnByName(wsEJC, "Job Code")
     
     ' Copy wsAppointed
-    Debug.Print ("Copying wsAppointed to wsEJC")
+    Debug.Print ("Copying wsAppointed to " & wsEJC.Name)
     x = CopyRange(wsAppointed, emplColAppointed, emplColAppointed, 2, lastRowAppointed, wsEJC, 1, lastRowEJC + 1)
     x = CopyRange(wsAppointed, nameColAppointed, nameColAppointed, 2, lastRowAppointed, wsEJC, 2, lastRowEJC + 1)
     x = CopyRange(wsAppointed, jobcodeAppointed, jobcodeAppointed, 2, lastRowAppointed, wsEJC, 3, lastRowEJC + 1)
-    Debug.Print ("Finding new last row for EJC")
     lastRowEJC = FindLastRowInSheet(wsEJC)
     
     ' Copy wsHourly
-    Debug.Print ("Copying wsHourly to wsEJC")
+    Debug.Print ("Copying wsHourly to " & wsEJC.Name)
     x = CopyRange(wsHourly, emplColHourly, emplColHourly, 2, lastRowHourly, wsEJC, 1, lastRowEJC + 1)
     x = CopyRange(wsHourly, nameColHourly, nameColHourly, 2, lastRowHourly, wsEJC, 2, lastRowEJC + 1)
     x = CopyRange(wsHourly, jobcodeHourly, jobcodeHourly, 2, lastRowHourly, wsEJC, 3, lastRowEJC + 1)
-    Debug.Print ("Finding new last row for EJC")
     lastRowEJC = FindLastRowInSheet(wsEJC)
     
     
@@ -581,7 +580,7 @@ Sub GenerateEmployeeList()
             Next r
         End With
     End With
-
+    
     x = MsgBox("Employee/Job Code list has been generated.")
 End Sub
 
@@ -681,7 +680,7 @@ Sub RemoveCanceledClasses()
             End If
         Next r
     End With
-    
+
     With wsHourly.Range("A1:" & GetColumnLetterByNumber(colCanceledHourly) & lastRowHourly)
         For r = .Rows.Count To 1 Step -1
             If .Cells(r, colCanceledHourly) = "Y" Then
