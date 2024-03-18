@@ -567,7 +567,7 @@ Sub GenerateEmployeeList()
     
     ' Remove Duplicates
     With wsEJC
-        With .Cells(1, 1).CurrentRegion
+        With .Range("A1", "C" & lastRowEJC)
             .RemoveDuplicates Columns:=Array(1, 3), Header:=xlYes
         End With
     End With
