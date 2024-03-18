@@ -364,20 +364,7 @@ Sub RefreshData()
         Workbooks.Open Filename:=Path & Filename, ReadOnly:=True
             Set ThatWorkbook = Workbooks(Filename)
             Set copyAppointed = GetSheetLike("*Appointed*", ThatWorkbook)
-            For Each ws In Workbooks(Filename).Worksheets
-                Debug.Print ("Worksheet: " & ws.Name);
-                If ws.Name Like "*Appointed*" Then
-                    Debug.Print (vbTab & "copyAppointed")
-                    Set copyAppointed = ws
-                ElseIf ws.Name Like "*Hourly*" Then
-                    Debug.Print (vbTab & "copyHourly")
-                    Set copyHourly = ws
-                Else
-                    Debug.Print (vbTab & "Not Used")
-                End If
-            Next ws
-            'Set copyAppointed = Workbooks(Filename).Worksheets("BDV&ITC Appointed")
-            'Set copyHourly = Workbooks(Filename).Worksheets("BDV&ITC Hourly ")
+            Set copyHourly = GetSheetLike("*Hourly*", ThatWorkbook)
             
             ' Find last non-empty row in copy and Find first empty row in This Workbook
             lCopyLastRow = FindLastRowInSheet(copyAppointed)
