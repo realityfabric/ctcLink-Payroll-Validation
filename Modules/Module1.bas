@@ -366,6 +366,34 @@ Sub RefreshData()
             Set copyAppointed = GetSheetLike("*Appointed*", ThatWorkbook)
             Set copyHourly = GetSheetLike("*Hourly*", ThatWorkbook)
             
+            promptArg = " sheet not found for workbook " _
+                & ThatWorkbook.Name & vbNewLine & vbNewLine _
+                & "Click OK to continue, or Cancel to exit the macro."
+            buttonsArg = vbExclamation _
+                + vbOKCancel _
+                + vbApplicationModal _
+                + vbMsgBoxSetForeground
+                        
+            If copyAppointed Is Nothing Then
+                response = MsgBox("Appointed" & promptArg _
+                    , buttonsArg _
+                    , "Appointed Sheet Not Found")
+                If response <> 1 Then ' 1 = vbOK
+                    Debug.Print ("User declined to continue with script. Terminating Script.")
+                    End
+                End If
+            End If
+            
+            If copyHourly Is Nothing Then
+                response = MsgBox("Hourly" & promptArg _
+                     , buttonsArg _
+                    , "Hourly Sheet Not Found")
+                If response <> 1 Then ' 1 = vbOK
+                    Debug.Print ("User declined to continue with script. Terminating Script.")
+                    End
+                End If
+            End If
+            
             ' Find last non-empty row in copy and Find first empty row in This Workbook
             lCopyLastRow = FindLastRowInSheet(copyAppointed)
             lDestLastRow = FindLastRowInSheet(destAppointed) + 1 ' TODO: fix references so that the +1 is not in the definition
