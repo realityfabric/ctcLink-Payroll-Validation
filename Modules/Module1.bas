@@ -21,7 +21,7 @@ Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksh
         Exit Function
     End If
     
-    GetSheet = sheet
+    Set GetSheet = sheet
 End Function
 
 Public Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Worksheet
