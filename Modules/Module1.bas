@@ -397,115 +397,118 @@ Sub RefreshData()
             
             ' Find last non-empty row in copy and Find first empty row in This Workbook
             
-            copyLastRow = FindLastRowInSheet(copyAppointed)
-            destLastRow = FindLastRowInSheet(destAppointed) + 1 ' TODO: fix references so that the +1 is not in the definition
+            If Not copyAppointed Is Nothing Then
+                copyLastRow = FindLastRowInSheet(copyAppointed)
+                destLastRow = FindLastRowInSheet(destAppointed) + 1 ' TODO: fix references so that the +1 is not in the definition
             
-            ' Get header for Column A and Match header in This Workbook
-            For i = 1 To 70
-                a = GetColumnLetterByNumber(i)
-                Debug.Print ("Scanning Column " & a & "..." & vbTab);
-                copy_val = copyAppointed.Range(a & "1").Value
-                If copy_val = "" Then
-                    Debug.Print ("Blank Column Detected, Moving to Copy Step..." & vbTab)
-                    Exit For
-                End If
-                dest_head = -1 ' -1 is an impossible column, indicating failure
-                msg_string = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msg_string will be updated if match is detected
-                
-                For Each c In destAppointed.Range("A1:CZ1")
-                    If copy_val = c.Value Then
-                        msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
-                        dest_head = c.Column
-                    ElseIf Left(copy_val, 3) = c.Value Then
-                        msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
-                        dest_head = c.Column
+                ' Get header for Column A and Match header in This Workbook
+                For i = 1 To 70
+                    a = GetColumnLetterByNumber(i)
+                    Debug.Print ("Scanning Column " & a & "..." & vbTab);
+                    copy_val = copyAppointed.Range(a & "1").Value
+                    If copy_val = "" Then
+                        Debug.Print ("Blank Column Detected, Moving to Copy Step..." & vbTab)
+                        Exit For
                     End If
-                Next c
-                
-                If Len(msg_string) < 40 Then
-                    Debug.Print (msg_string & vbTab & vbTab & vbTab);
-                ElseIf Len(msg_string) < 44 Then
-                    Debug.Print (msg_string & vbTab & vbTab);
-                Else
-                    Debug.Print (msg_string & vbTab);
-                End If
-                
-                If dest_head = -1 Then
-                    mb = MsgBox(msg_string, vbCritical)
-                Else
-                    ' Starting at first (fully) blank row in This Workbook:
-                    ' Copy Column A to This Workbook in correct column
-                    Debug.Print ("Copying Column " & a & "... ");
-                    Set rg = copyAppointed.Range(a & "2:" & a & copyLastRow)
-                    destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
-                    ' below commented out - does not copy values only, copies formulas, which break due to rearranging data
-                    ' copyAppointed.Range(a & "2:" & a & copyLastRow).Copy _
-                    '     destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
-                    Debug.Print ("Column " & a & " Complete!")
-                End If
-            Next i
+                    dest_head = -1 ' -1 is an impossible column, indicating failure
+                    msg_string = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msg_string will be updated if match is detected
+                    
+                    For Each c In destAppointed.Range("A1:CZ1")
+                        If copy_val = c.Value Then
+                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            dest_head = c.Column
+                        ElseIf Left(copy_val, 3) = c.Value Then
+                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            dest_head = c.Column
+                        End If
+                    Next c
+                    
+                    If Len(msg_string) < 40 Then
+                        Debug.Print (msg_string & vbTab & vbTab & vbTab);
+                    ElseIf Len(msg_string) < 44 Then
+                        Debug.Print (msg_string & vbTab & vbTab);
+                    Else
+                        Debug.Print (msg_string & vbTab);
+                    End If
+                    
+                    If dest_head = -1 Then
+                        mb = MsgBox(msg_string, vbCritical)
+                    Else
+                        ' Starting at first (fully) blank row in This Workbook:
+                        ' Copy Column A to This Workbook in correct column
+                        Debug.Print ("Copying Column " & a & "... ");
+                        Set rg = copyAppointed.Range(a & "2:" & a & copyLastRow)
+                        destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
+                        ' below commented out - does not copy values only, copies formulas, which break due to rearranging data
+                        ' copyAppointed.Range(a & "2:" & a & copyLastRow).Copy _
+                        '     destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
+                        Debug.Print ("Column " & a & " Complete!")
+                    End If
+                Next i
+            End If ' End of work on Appointed sheet
             
             ' HOURLY
-            Debug.Print ("Working on worksheet: Hourly")
-            destHourly.Activate
-            
-             ' Find last non-empty row in copy and Find first empty row in This Workbook
-            copyLastRow = FindLastRowInSheet(copyHourly)
-            destLastRow = FindLastRowInSheet(destHourly) + 1
-            
-            ' Get header for Column A and Match header in This Workbook
-            For i = 1 To 70
-                a = GetColumnLetterByNumber(i)
-                Debug.Print ("Scanning Column " & a & "..." & vbTab);
-                copy_val = copyHourly.Range(a & "1").Value
-                If copy_val = "" Then
-                    Debug.Print ("Blank Column Detected, Moving to Copy Step..." & vbTab)
-                    Exit For
-                End If
-                dest_head = -1 ' -1 is an impossible column, indicating failure
-                msg_string = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msg_string will be updated if match is detected
+            If Not copyHourly Is Nothing Then
+                Debug.Print ("Working on worksheet: Hourly")
+                destHourly.Activate
                 
-                For Each c In destHourly.Range("A1:CZ1")
-                    If copy_val = c.Value Then
-                        msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
-                        dest_head = c.Column
-                    ElseIf Right(c.Value, 5) = "Hours" Then
-                        If Left(copy_val, 3) = Left(c.Value, 3) Then
-                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
-                            dest_head = c.Column
-                        End If
-                    ElseIf Right(c.Value, 3) = "Pay" Then
-                        If copy_val = "$ " & Left(c.Value, 3) & " $" Then
-                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
-                            dest_head = c.Column
-                        End If
+                 ' Find last non-empty row in copy and Find first empty row in This Workbook
+                copyLastRow = FindLastRowInSheet(copyHourly)
+                destLastRow = FindLastRowInSheet(destHourly) + 1
+                
+                ' Get header for Column A and Match header in This Workbook
+                For i = 1 To 70
+                    a = GetColumnLetterByNumber(i)
+                    Debug.Print ("Scanning Column " & a & "..." & vbTab);
+                    copy_val = copyHourly.Range(a & "1").Value
+                    If copy_val = "" Then
+                        Debug.Print ("Blank Column Detected, Moving to Copy Step..." & vbTab)
+                        Exit For
                     End If
-                Next c
-                
-                If Len(msg_string) < 40 Then
-                    Debug.Print (msg_string & vbTab & vbTab & vbTab);
-                ElseIf Len(msg_string) < 44 Then
-                    Debug.Print (msg_string & vbTab & vbTab);
-                Else
-                    Debug.Print (msg_string & vbTab);
-                End If
-                
-                If dest_head = -1 Then
-                    mb = MsgBox(msg_string, vbCritical)
-                Else
-                    ' Starting at first (fully) blank row in This Workbook:
-                    ' Copy Column A to This Workbook in correct column
-                    copy_range_string = a & "2:" & a & copyLastRow
-                    dest_range_start_string = GetColumnLetterByNumber(dest_head) & destLastRow
-                    Debug.Print ("Copying " & copy_range_string & " to " & dest_range_start_string & "...");
-                    Set rg = copyHourly.Range(copy_range_string)
-                    destHourly.Range(dest_range_start_string).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
-                    'copyHourly.Range(a & "2:" & a & copyLastRow).Copy _
-                    '    destHourly.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
-                    Debug.Print ("Column " & a & " Complete!")
-                End If
-            Next i
-  
+                    dest_head = -1 ' -1 is an impossible column, indicating failure
+                    msg_string = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msg_string will be updated if match is detected
+                    
+                    For Each c In destHourly.Range("A1:CZ1")
+                        If copy_val = c.Value Then
+                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            dest_head = c.Column
+                        ElseIf Right(c.Value, 5) = "Hours" Then
+                            If Left(copy_val, 3) = Left(c.Value, 3) Then
+                                msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                                dest_head = c.Column
+                            End If
+                        ElseIf Right(c.Value, 3) = "Pay" Then
+                            If copy_val = "$ " & Left(c.Value, 3) & " $" Then
+                                msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                                dest_head = c.Column
+                            End If
+                        End If
+                    Next c
+                    
+                    If Len(msg_string) < 40 Then
+                        Debug.Print (msg_string & vbTab & vbTab & vbTab);
+                    ElseIf Len(msg_string) < 44 Then
+                        Debug.Print (msg_string & vbTab & vbTab);
+                    Else
+                        Debug.Print (msg_string & vbTab);
+                    End If
+                    
+                    If dest_head = -1 Then
+                        mb = MsgBox(msg_string, vbCritical)
+                    Else
+                        ' Starting at first (fully) blank row in This Workbook:
+                        ' Copy Column A to This Workbook in correct column
+                        copy_range_string = a & "2:" & a & copyLastRow
+                        dest_range_start_string = GetColumnLetterByNumber(dest_head) & destLastRow
+                        Debug.Print ("Copying " & copy_range_string & " to " & dest_range_start_string & "...");
+                        Set rg = copyHourly.Range(copy_range_string)
+                        destHourly.Range(dest_range_start_string).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
+                        'copyHourly.Range(a & "2:" & a & copyLastRow).Copy _
+                        '    destHourly.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
+                        Debug.Print ("Column " & a & " Complete!")
+                    End If
+                Next i
+            End If ' End of work on Hourly sheet
         End If
         Workbooks(Filename).Close SaveChanges:=False
         Debug.Print (Filename + " is closed." & vbNewLine)
