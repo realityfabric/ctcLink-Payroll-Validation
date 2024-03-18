@@ -565,12 +565,23 @@ Sub GenerateEmployeeList()
     lastRowEJC = FindLastRowInSheet(wsEJC)
     
     
-    ' Remove Duplicates
+    ' Remove Duplicates and Blanks
     With wsEJC
+        Debug.Print ("Deleting Duplicates in " & .Name)
         With .Range("A1", "C" & lastRowEJC)
             .RemoveDuplicates Columns:=Array(1, 3), Header:=xlYes
         End With
+        lastRowEJC = FindLastRowInSheet(wsEJC)
+        Debug.Print ("Deleting Blank Rows in " & .Name)
+        With .Range("A1", "C" & lastRowEJC)
+            For r = .Rows.Count To 1 Step -1 ' https://spreadsheetplanet.com/excel-vba/delete-blank-rows/
+                If Application.WorksheetFunction.CountA(.Rows(r)) = 0 Then
+                    .Rows(r).Delete
+                End If
+            Next r
+        End With
     End With
+
     x = MsgBox("Employee/Job Code list has been generated.")
 End Sub
 
