@@ -24,6 +24,28 @@ Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksh
     GetSheet = sheet
 End Function
 
+Public Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Worksheet
+    Debug.Print ("GetSheetLike(" & sheetName & ")")
+    If wb Is Nothing Then Set wb = ThisWorkbook
+    
+    Dim ws As Worksheet, sheet As Worksheet
+    Set sheet = Nothing
+    For Each ws In wb.Sheets
+        If sheetName Like ws.Name Then
+            Debug.Print ("Found: " & ws.Name & " Like " & sheetName)
+            Set sheet = ws
+            Set GetSheetLike = ws
+            Exit Function
+        End If
+    Next ws
+    
+    If sheet Is Nothing Then
+        Debug.Print ("Sheet not found.")
+    End If
+    
+    Set GetSheetLike = sheet
+End Function
+
 Public Function SetHeadersEJC(ws)
     ' Set headers for EJC List
     ws.Range("A1").Value = "Empl ID"
@@ -291,6 +313,7 @@ End Function
 Sub RefreshData()
     Debug.Print ("VBA Subroutine Main(): Start.")
     Dim rg As Range
+    Dim ThatWorkbook As Workbook
     Dim destAppointed As Worksheet, destHourly As Worksheet, destOther As Worksheet, destEJC As Worksheet
     Dim copyAppointed As Worksheet, copyHourly As Worksheet, copyOther As Worksheet
         
@@ -339,6 +362,8 @@ Sub RefreshData()
         destOther.Range("A1").Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
     Else
         Workbooks.Open Filename:=Path & Filename, ReadOnly:=True
+            Set ThatWorkbook = Workbooks(Filename)
+            Set copyAppointed = GetSheetLike("*Appointed*", ThatWorkbook)
             For Each ws In Workbooks(Filename).Worksheets
                 Debug.Print ("Worksheet: " & ws.Name);
                 If ws.Name Like "*Appointed*" Then
