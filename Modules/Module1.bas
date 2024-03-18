@@ -316,6 +316,7 @@ Sub RefreshData()
     Dim ThatWorkbook As Workbook
     Dim destAppointed As Worksheet, destHourly As Worksheet, destOther As Worksheet, destEJC As Worksheet
     Dim copyAppointed As Worksheet, copyHourly As Worksheet, copyOther As Worksheet
+    Dim copyLastRow As Long, destLastRow As Long
         
     ' Ask if clearing Existing Data is acceptable
         ' If No: Exit Macro
@@ -395,8 +396,9 @@ Sub RefreshData()
             End If
             
             ' Find last non-empty row in copy and Find first empty row in This Workbook
-            lCopyLastRow = FindLastRowInSheet(copyAppointed)
-            lDestLastRow = FindLastRowInSheet(destAppointed) + 1 ' TODO: fix references so that the +1 is not in the definition
+            
+            copyLastRow = FindLastRowInSheet(copyAppointed)
+            destLastRow = FindLastRowInSheet(destAppointed) + 1 ' TODO: fix references so that the +1 is not in the definition
             
             ' Get header for Column A and Match header in This Workbook
             For i = 1 To 70
@@ -434,11 +436,11 @@ Sub RefreshData()
                     ' Starting at first (fully) blank row in This Workbook:
                     ' Copy Column A to This Workbook in correct column
                     Debug.Print ("Copying Column " & a & "... ");
-                    Set rg = copyAppointed.Range(a & "2:" & a & lCopyLastRow)
-                    destAppointed.Range(GetColumnLetterByNumber(dest_head) & lDestLastRow).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
+                    Set rg = copyAppointed.Range(a & "2:" & a & copyLastRow)
+                    destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
                     ' below commented out - does not copy values only, copies formulas, which break due to rearranging data
-                    ' copyAppointed.Range(a & "2:" & a & lCopyLastRow).Copy _
-                    '     destAppointed.Range(GetColumnLetterByNumber(dest_head) & lDestLastRow)
+                    ' copyAppointed.Range(a & "2:" & a & copyLastRow).Copy _
+                    '     destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
                     Debug.Print ("Column " & a & " Complete!")
                 End If
             Next i
@@ -448,8 +450,8 @@ Sub RefreshData()
             destHourly.Activate
             
              ' Find last non-empty row in copy and Find first empty row in This Workbook
-            lCopyLastRow = FindLastRowInSheet(copyHourly)
-            lDestLastRow = FindLastRowInSheet(destHourly) + 1
+            copyLastRow = FindLastRowInSheet(copyHourly)
+            destLastRow = FindLastRowInSheet(destHourly) + 1
             
             ' Get header for Column A and Match header in This Workbook
             For i = 1 To 70
@@ -493,13 +495,13 @@ Sub RefreshData()
                 Else
                     ' Starting at first (fully) blank row in This Workbook:
                     ' Copy Column A to This Workbook in correct column
-                    copy_range_string = a & "2:" & a & lCopyLastRow
-                    dest_range_start_string = GetColumnLetterByNumber(dest_head) & lDestLastRow
+                    copy_range_string = a & "2:" & a & copyLastRow
+                    dest_range_start_string = GetColumnLetterByNumber(dest_head) & destLastRow
                     Debug.Print ("Copying " & copy_range_string & " to " & dest_range_start_string & "...");
                     Set rg = copyHourly.Range(copy_range_string)
                     destHourly.Range(dest_range_start_string).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
-                    'copyHourly.Range(a & "2:" & a & lCopyLastRow).Copy _
-                    '    destHourly.Range(GetColumnLetterByNumber(dest_head) & lDestLastRow)
+                    'copyHourly.Range(a & "2:" & a & copyLastRow).Copy _
+                    '    destHourly.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
                     Debug.Print ("Column " & a & " Complete!")
                 End If
             Next i
