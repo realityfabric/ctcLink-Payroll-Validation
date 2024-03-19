@@ -29,14 +29,14 @@ Public Function DebugPrint(log As String, Optional timeStamp As Boolean = True, 
 End Function
 
 Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksheet
-    Debug.Print ("GetSheet(" & sheetName & ")")
+    DebugPrint ("GetSheet(" & sheetName & ")")
     If wb Is Nothing Then Set wb = ThisWorkbook
     
     Dim ws As Worksheet, sheet As Worksheet
     Set sheet = Nothing
     For Each ws In wb.Sheets
         If sheetName = ws.Name Then
-            Debug.Print ("Found: " & ws.Name & " = " & sheetName)
+            DebugPrint ("Found: " & ws.Name & " = " & sheetName)
             Set sheet = ws
             Set GetSheet = ws
             Exit Function
@@ -44,7 +44,7 @@ Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksh
     Next ws
     
     If sheet Is Nothing Then
-        Debug.Print ("Sheet not found. Creating sheet.")
+        DebugPrint ("Sheet not found. Creating sheet.")
         Set sheet = wb.Sheets.Add(After:=wb.Sheets(wb.Sheets.Count))
         sheet.Name = sheetName
         Set GetSheet = sheet
@@ -55,14 +55,14 @@ Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksh
 End Function
 
 Public Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Worksheet
-    Debug.Print ("GetSheetLike(" & sheetName & ")")
+    DebugPrint ("GetSheetLike(" & sheetName & ")")
     If wb Is Nothing Then Set wb = ThisWorkbook
     
     Dim ws As Worksheet, sheet As Worksheet
     Set sheet = Nothing
     For Each ws In wb.Sheets
         If ws.Name Like sheetName Then
-            Debug.Print ("Found: " & ws.Name & " Like " & sheetName)
+            DebugPrint ("Found: " & ws.Name & " Like " & sheetName)
             Set sheet = ws
             Set GetSheetLike = ws
             Exit Function
@@ -70,7 +70,7 @@ Public Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Wo
     Next ws
     
     If sheet Is Nothing Then
-        Debug.Print ("Sheet not found.")
+        DebugPrint ("Sheet not found.")
     End If
     
     Set GetSheetLike = sheet
@@ -271,7 +271,7 @@ Public Function FindLastRowInSheet(ws) As Long
     ' based on https://stackoverflow.com/a/11169920
     Dim lastRow As Long
     
-    Debug.Print ("FindLastRowInSheet(" & ws.Name & ")")
+    DebugPrint ("FindLastRowInSheet(" & ws.Name & ")")
     
     With ws
         If Application.WorksheetFunction.CountA(.Cells) <> 0 Then
@@ -282,9 +282,9 @@ Public Function FindLastRowInSheet(ws) As Long
                 SearchOrder:=xlByRows, _
                 SearchDirection:=xlPrevious, _
                 MatchCase:=False).Row
-            Debug.Print ("Last row in " & ws.Name & " = " & lastRow)
+            DebugPrint ("Last row in " & ws.Name & " = " & lastRow)
         Else
-            Debug.Print ("Worksheet " & ws.Name & " has no rows! Setting lastRow = 1")
+            DebugPrint ("Worksheet " & ws.Name & " has no rows! Setting lastRow = 1")
             lastRow = 1
         End If
     End With
@@ -305,7 +305,7 @@ Public Function FindColumnByName(ws, columnName, Optional headerRow As Integer =
 End Function
 
 Sub RefreshData()
-    Debug.Print ("VBA Subroutine Main(): Start.")
+    DebugPrint ("VBA Subroutine Main(): Start.")
     Dim rg As Range
     Dim ThatWorkbook As Workbook
     Dim destAppointed As Worksheet, destHourly As Worksheet, destOther As Worksheet, destEJC As Worksheet
@@ -316,13 +316,13 @@ Sub RefreshData()
         ' If No: Exit Macro
     continue = MsgBox("Continuing will delete some of the data in this workbook before it begins, and will open and close other workbooks while it runs. Please save and close all other Excel Workbooks before continuing." & vbNewLine & vbNewLine & "Do you want to continue?", vbExclamation + vbYesNo + vbDefaultButton2, "Continue?")
     If continue <> 6 Then ' 6 is MsgBox "Yes"
-        Debug.Print ("User declined to continue with script. Terminating Script.")
+        DebugPrint ("User declined to continue with script. Terminating Script.")
         End
     End If
         
     ' Get Path to Workbook
     Path = ThisWorkbook.Path & "\"
-    Debug.Print ("Workbook Path: " & Path)
+    DebugPrint ("Workbook Path: " & Path)
     
     Set destAppointed = GetSheet("Appointed")
     Set destHourly = GetSheet("Hourly")
@@ -330,13 +330,13 @@ Sub RefreshData()
     Set destEJC = GetSheet("EJC List")
     
     ' Clear Existing Data
-    Debug.Print ("Deleting Data from 'Appointed'")
+    DebugPrint ("Deleting Data from 'Appointed'")
     destAppointed.UsedRange.Delete
-    Debug.Print ("Deleting Data from 'Hourly'")
+    DebugPrint ("Deleting Data from 'Hourly'")
     destHourly.UsedRange.Delete
-    Debug.Print ("Deleting Data from 'QHC_PY_PAY_CHECK_TH_EARNS'")
+    DebugPrint ("Deleting Data from 'QHC_PY_PAY_CHECK_TH_EARNS'")
     destOther.UsedRange.Delete
-    Debug.Print ("Deleting Data from 'EJC List'")
+    DebugPrint ("Deleting Data from 'EJC List'")
     destEJC.UsedRange.Delete
 
     
@@ -349,7 +349,7 @@ Sub RefreshData()
     Filename = Dir(Path & "*.xlsx")
     ' For each workbook:
     Do While Filename <> ""
-    Debug.Print (Filename)
+    DebugPrint (Filename)
     If Filename Like "*QHC_PY_PAY_CHECK_OTH_EARNS.xlsx" Then
         Workbooks.Open Filename:=Path & Filename, ReadOnly:=True
         Set copySheet = Workbooks(Filename).Worksheets("Sheet1")
@@ -374,7 +374,7 @@ Sub RefreshData()
                     , buttonsArg _
                     , "Appointed Sheet Not Found")
                 If response <> 1 Then ' 1 = vbOK
-                    Debug.Print ("User declined to continue with script. Terminating Script.")
+                    DebugPrint ("User declined to continue with script. Terminating Script.")
                     End
                 End If
             End If
@@ -384,7 +384,7 @@ Sub RefreshData()
                      , buttonsArg _
                     , "Hourly Sheet Not Found")
                 If response <> 1 Then ' 1 = vbOK
-                    Debug.Print ("User declined to continue with script. Terminating Script.")
+                    DebugPrint ("User declined to continue with script. Terminating Script.")
                     End
                 End If
             End If
@@ -398,10 +398,10 @@ Sub RefreshData()
                 ' Get header for Column A and Match header in This Workbook
                 For i = 1 To 70
                     a = GetColumnLetterByNumber(i)
-                    Debug.Print ("Scanning Column " & a & "..." & vbTab);
+                    x = DebugPrint("Scanning Column " & a & "..." & vbTab, True, False)
                     copy_val = copyAppointed.Range(a & "1").Value
                     If copy_val = "" Then
-                        Debug.Print ("Blank Column Detected, Moving to Copy Step..." & vbTab)
+                        x = DebugPrint("Blank Column Detected, Moving to Copy Step..." & vbTab, False, True)
                         Exit For
                     End If
                     dest_head = -1 ' -1 is an impossible column, indicating failure
@@ -418,11 +418,11 @@ Sub RefreshData()
                     Next c
                     
                     If Len(msg_string) < 40 Then
-                        Debug.Print (msg_string & vbTab & vbTab & vbTab);
+                        x = DebugPrint(msg_string & vbTab & vbTab & vbTab, False, False)
                     ElseIf Len(msg_string) < 44 Then
-                        Debug.Print (msg_string & vbTab & vbTab);
+                        x = DebugPrint(msg_string & vbTab & vbTab, False, False)
                     Else
-                        Debug.Print (msg_string & vbTab);
+                        x = DebugPrint(msg_string & vbTab, False, False)
                     End If
                     
                     If dest_head = -1 Then
@@ -430,20 +430,20 @@ Sub RefreshData()
                     Else
                         ' Starting at first (fully) blank row in This Workbook:
                         ' Copy Column A to This Workbook in correct column
-                        Debug.Print ("Copying Column " & a & "... ");
+                        x = DebugPrint("Copying Column " & a & "... ", False, False)
                         Set rg = copyAppointed.Range(a & "2:" & a & copyLastRow)
                         destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
                         ' below commented out - does not copy values only, copies formulas, which break due to rearranging data
                         ' copyAppointed.Range(a & "2:" & a & copyLastRow).Copy _
                         '     destAppointed.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
-                        Debug.Print ("Column " & a & " Complete!")
+                        x = DebugPrint("Column " & a & " Complete!", False, True)
                     End If
                 Next i
             End If ' End of work on Appointed sheet
             
             ' HOURLY
             If Not copyHourly Is Nothing Then
-                Debug.Print ("Working on worksheet: Hourly")
+                DebugPrint ("Working on worksheet: Hourly")
                 destHourly.Activate
                 
                  ' Find last non-empty row in copy and Find first empty row in This Workbook
@@ -453,10 +453,10 @@ Sub RefreshData()
                 ' Get header for Column A and Match header in This Workbook
                 For i = 1 To 70
                     a = GetColumnLetterByNumber(i)
-                    Debug.Print ("Scanning Column " & a & "..." & vbTab);
+                    x = DebugPrint("Scanning Column " & a & "..." & vbTab, True, False)
                     copy_val = copyHourly.Range(a & "1").Value
                     If copy_val = "" Then
-                        Debug.Print ("Blank Column Detected, Moving to Copy Step..." & vbTab)
+                        x = DebugPrint("Blank Column Detected, Moving to Copy Step..." & vbTab, False, True)
                         Exit For
                     End If
                     dest_head = -1 ' -1 is an impossible column, indicating failure
@@ -480,11 +480,11 @@ Sub RefreshData()
                     Next c
                     
                     If Len(msg_string) < 40 Then
-                        Debug.Print (msg_string & vbTab & vbTab & vbTab);
+                        x = DebugPrint(msg_string & vbTab & vbTab & vbTab, False, False)
                     ElseIf Len(msg_string) < 44 Then
-                        Debug.Print (msg_string & vbTab & vbTab);
+                        x = DebugPrint(msg_string & vbTab & vbTab, False, False)
                     Else
-                        Debug.Print (msg_string & vbTab);
+                        x = DebugPrint(msg_string & vbTab, False, False)
                     End If
                     
                     If dest_head = -1 Then
@@ -494,29 +494,29 @@ Sub RefreshData()
                         ' Copy Column A to This Workbook in correct column
                         copy_range_string = a & "2:" & a & copyLastRow
                         dest_range_start_string = GetColumnLetterByNumber(dest_head) & destLastRow
-                        Debug.Print ("Copying " & copy_range_string & " to " & dest_range_start_string & "...");
+                        x = DebugPrint("Copying " & copy_range_string & " to " & dest_range_start_string & "...", False, False)
                         Set rg = copyHourly.Range(copy_range_string)
                         destHourly.Range(dest_range_start_string).Resize(rg.Rows.Count, rg.Columns.Count).Cells.Value = rg.Cells.Value
                         'copyHourly.Range(a & "2:" & a & copyLastRow).Copy _
                         '    destHourly.Range(GetColumnLetterByNumber(dest_head) & destLastRow)
-                        Debug.Print ("Column " & a & " Complete!")
+                        x = DebugPrint("Column " & a & " Complete!", False, True)
                     End If
                 Next i
             End If ' End of work on Hourly sheet
         End If
         Workbooks(Filename).Close SaveChanges:=False
-        Debug.Print (Filename + " is closed." & vbNewLine)
+        DebugPrint (Filename + " is closed." & vbNewLine)
         Filename = Dir()
     Loop
     
     
     
-    Debug.Print ("VBA Subroutine Main(): End.")
+    DebugPrint ("VBA Subroutine Main(): End.")
     a = MsgBox("Workbook Refresh Complete!")
 End Sub
 
 Sub GenerateEmployeeList()
-    Debug.Print ("GenerateEmployeeList(): Start.")
+    DebugPrint ("GenerateEmployeeList(): Start.")
     Dim wsAppointed As Worksheet, wsHourly As Worksheet, wsEJC As Worksheet
     Dim lastRowAppointed As Long, lastRowHourly As Long, lastRowEJC As Long
     Dim emplColAppointed As Integer, emplColHourly As Integer, emplColEJC As Integer
@@ -542,14 +542,14 @@ Sub GenerateEmployeeList()
     jobcodeEJC = FindColumnByName(wsEJC, "Job Code")
     
     ' Copy wsAppointed
-    Debug.Print ("Copying wsAppointed to " & wsEJC.Name)
+    DebugPrint ("Copying wsAppointed to " & wsEJC.Name)
     x = CopyRange(wsAppointed, emplColAppointed, emplColAppointed, 2, lastRowAppointed, wsEJC, 1, lastRowEJC + 1)
     x = CopyRange(wsAppointed, nameColAppointed, nameColAppointed, 2, lastRowAppointed, wsEJC, 2, lastRowEJC + 1)
     x = CopyRange(wsAppointed, jobcodeAppointed, jobcodeAppointed, 2, lastRowAppointed, wsEJC, 3, lastRowEJC + 1)
     lastRowEJC = FindLastRowInSheet(wsEJC)
     
     ' Copy wsHourly
-    Debug.Print ("Copying wsHourly to " & wsEJC.Name)
+    DebugPrint ("Copying wsHourly to " & wsEJC.Name)
     x = CopyRange(wsHourly, emplColHourly, emplColHourly, 2, lastRowHourly, wsEJC, 1, lastRowEJC + 1)
     x = CopyRange(wsHourly, nameColHourly, nameColHourly, 2, lastRowHourly, wsEJC, 2, lastRowEJC + 1)
     x = CopyRange(wsHourly, jobcodeHourly, jobcodeHourly, 2, lastRowHourly, wsEJC, 3, lastRowEJC + 1)
@@ -558,12 +558,12 @@ Sub GenerateEmployeeList()
     
     ' Remove Duplicates and Blanks
     With wsEJC
-        Debug.Print ("Deleting Duplicates in " & .Name)
+        DebugPrint ("Deleting Duplicates in " & .Name)
         With .Range("A1", "C" & lastRowEJC)
             .RemoveDuplicates Columns:=Array(1, 3), Header:=xlYes
         End With
         lastRowEJC = FindLastRowInSheet(wsEJC)
-        Debug.Print ("Deleting Blank Rows in " & .Name)
+        DebugPrint ("Deleting Blank Rows in " & .Name)
         With .Range("A1", "C" & lastRowEJC)
             For r = .Rows.Count To 1 Step -1 ' https://spreadsheetplanet.com/excel-vba/delete-blank-rows/
                 If Application.WorksheetFunction.CountA(.Rows(r)) = 0 Then
@@ -650,7 +650,7 @@ Sub GeneratePayrollSummary()
 End Sub
 
 Sub RemoveCanceledClasses()
-    Debug.Print ("RemoveCanceledClasses(): Start.")
+    DebugPrint ("RemoveCanceledClasses(): Start.")
     Dim wsAppointed As Worksheet, wsHourly As Worksheet
     Dim lastRowAppoinetd As Long, lastRowHourly As Long
     Set wsAppointed = GetSheet("Appointed")
@@ -662,12 +662,12 @@ Sub RemoveCanceledClasses()
     colCanceledAppointed = FindColumnByName(wsAppointed, "Canceled Class")
     colCanceledHourly = FindColumnByName(wsHourly, "Canceled Class")
     
-    Debug.Print ("Appointed: Deleting Rows with Canceled Classes...")
+    DebugPrint ("Appointed: Deleting Rows with Canceled Classes...")
     Dim r As Long ' r will store the row in the upcoming loop
     With wsAppointed.Range("A1:" & GetColumnLetterByNumber(colCanceledAppointed) & lastRowAppointed)
         For r = .Rows.Count To 1 Step -1
             If .Cells(r, colCanceledAppointed) = "Y" Then
-                Debug.Print ("Deleting row " & r)
+                DebugPrint ("Deleting row " & r)
                 .Rows(r).EntireRow.Delete
             End If
         Next r
@@ -676,13 +676,12 @@ Sub RemoveCanceledClasses()
     With wsHourly.Range("A1:" & GetColumnLetterByNumber(colCanceledHourly) & lastRowHourly)
         For r = .Rows.Count To 1 Step -1
             If .Cells(r, colCanceledHourly) = "Y" Then
-                Debug.Print ("Deleting row " & r)
+                DebugPrint ("Deleting row " & r)
                 .Rows(r).EntireRow.Delete
             End If
         Next r
     End With
 
     x = MsgBox("Canceled Classes removed.")
-    Debug.Print ("RemoveCanceledClasses(): End.")
+    DebugPrint ("RemoveCanceledClasses(): End.")
 End Sub
-
