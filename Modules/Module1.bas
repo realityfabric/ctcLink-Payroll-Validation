@@ -1,3 +1,22 @@
+Public Function DebugPrint(log As String)
+    Dim filePath As String, dateFormat As String, logFileName As String
+    Dim fs, f
+    Const IOMODE = 8 ' ForAppending
+    Const CREATE = True ' Create new file if no file exists
+    Const TEXTFORMAT = 0 ' Write file as ASCII
+    filePath = ThisWorkbook.Path & "\"
+    currentDate = FORMAT(Date, "YYYY-MM-DD")
+    currentTime = FORMAT(Now(), "hh:nn:ss")
+    logFileName = "debuglog_" & currentDate & ".txt"
+    
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set f = fs.OpenTextFile(filePath & logFileName, IOMODE, CREATE, TEXTFORMAT)
+    
+    Debug.Print currentTime & " - " & log
+    f.Write currentTime & " - " & log & vbNewLine
+    f.Close
+End Function
+
 Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksheet
     Debug.Print ("GetSheet(" & sheetName & ")")
     If wb Is Nothing Then Set wb = ThisWorkbook
