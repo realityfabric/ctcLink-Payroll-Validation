@@ -1,4 +1,4 @@
-Public Function DebugPrint(log As String)
+Public Function DebugPrint(log As String, Optional timeStamp As Boolean = True, Optional newLine As Boolean = True)
     Dim filePath As String, dateFormat As String, logFileName As String
     Dim fs, f
     Const IOMODE = 8 ' ForAppending
@@ -11,9 +11,20 @@ Public Function DebugPrint(log As String)
     
     Set fs = CreateObject("Scripting.FileSystemObject")
     Set f = fs.OpenTextFile(filePath & logFileName, IOMODE, CREATE, TEXTFORMAT)
+        
+    Dim logMessage As String
     
-    Debug.Print currentTime & " - " & log
-    f.Write currentTime & " - " & log & vbNewLine
+    If timeStamp Then logMessage = currentTime & " - "
+    logMessage = logMessage & log
+    Debug.Print (logMessage);
+    If newLine Then
+        Debug.Print ("") ' create new line in Immediate window
+        logMessage = logMessage & vbNewLine
+    Else
+        Debug.Print (""); ' prevent new line in Immediate window
+    End If
+        
+    f.Write logMessage
     f.Close
 End Function
 
