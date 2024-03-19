@@ -253,7 +253,7 @@ Public Function GetColumnLetterByNumber(columnNumber) As String
     
     ' if the tensLetter is A and the onesLetter is B then: AB
     ' this will break if the column is bigger than ZZ
-    tensLetter = colArr(Floor(columnNumber / 26))
+    tensLetter = colArr(Int(columnNumber / 26))
     onesLetter = colArr(columnNumber Mod 26)
     
     GetColumnLetterByNumber = tensLetter & onesLetter
