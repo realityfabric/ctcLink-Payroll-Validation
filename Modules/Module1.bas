@@ -192,7 +192,8 @@ End Function
 
 Public Function GetColumnLetterByNumber(columnNumber) As String
     ' Define array of columns
-    Dim colArr(1 To 70) As String
+    Dim colArr(0 To 26) As String
+    colArr(0) = ""
     colArr(1) = "A"
     colArr(2) = "B"
     colArr(3) = "C"
@@ -219,52 +220,13 @@ Public Function GetColumnLetterByNumber(columnNumber) As String
     colArr(24) = "X"
     colArr(25) = "Y"
     colArr(26) = "Z"
-    colArr(27) = "AA"
-    colArr(28) = "AB"
-    colArr(29) = "AC"
-    colArr(30) = "AD"
-    colArr(31) = "AE"
-    colArr(32) = "AF"
-    colArr(33) = "AG"
-    colArr(34) = "AH"
-    colArr(35) = "AI"
-    colArr(36) = "AJ"
-    colArr(37) = "AK"
-    colArr(38) = "AL"
-    colArr(39) = "AM"
-    colArr(40) = "AN"
-    colArr(41) = "AO"
-    colArr(42) = "AP"
-    colArr(43) = "AQ"
-    colArr(44) = "AR"
-    colArr(45) = "AS"
-    colArr(46) = "AT"
-    colArr(47) = "AU"
-    colArr(48) = "AV"
-    colArr(49) = "AW"
-    colArr(50) = "AX"
-    colArr(51) = "AY"
-    colArr(52) = "AZ"
-    colArr(53) = "BA"
-    colArr(54) = "BB"
-    colArr(55) = "BC"
-    colArr(56) = "BD"
-    colArr(57) = "BE"
-    colArr(58) = "BF"
-    colArr(59) = "BG"
-    colArr(60) = "BH"
-    colArr(61) = "BI"
-    colArr(62) = "BJ"
-    colArr(63) = "BK"
-    colArr(64) = "BL"
-    colArr(65) = "BM"
-    colArr(66) = "BN"
-    colArr(67) = "BO"
-    colArr(68) = "BP"
-    colArr(69) = "BQ"
-    colArr(70) = "BR"
     
-    GetColumnLetterByNumber = colArr(columnNumber)
+    ' if the tensLetter is A and the onesLetter is B then: AB
+    ' this will break if the column is bigger than ZZ
+    tensLetter = colArr(Floor(columnNumber / 26))
+    onesLetter = colArr(columnNumber Mod 26)
+    
+    GetColumnLetterByNumber = tensLetter & onesLetter
 End Function
 Public Function CopyRange(wsCopy, startColNumCopy, endColNumCopy, startRowNumCopy, endRowNumCopy, wsDest, startColNumDest, startRowNumDest)
     Dim rg As Range
@@ -693,3 +655,4 @@ Sub RemoveCanceledClasses()
     x = MsgBox("Canceled Classes removed.")
     Debug.Print ("RemoveCanceledClasses(): End.")
 End Sub
+
