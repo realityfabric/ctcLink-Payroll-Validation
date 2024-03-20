@@ -266,7 +266,6 @@ Public Function CopyRange(wsCopy, startColNumCopy, endColNumCopy, startRowNumCop
     
 End Function
 
-
 Public Function FindLastRowInSheet(ws) As Long
     ' based on https://stackoverflow.com/a/11169920
     Dim lastRow As Long
@@ -290,7 +289,39 @@ Public Function FindLastRowInSheet(ws) As Long
     End With
     
     FindLastRowInSheet = lastRow
+End Function
 
+' Query output typically has rows at the top before the header with the number of rows returned
+' Sometimes there are also rows with query input parameters
+' These rows typically only take up two columns
+' By default, the following function can expect a row with at least 3 columns to be the header.
+' By SBCTC standards, queries will not reduce the number of columns, but may increase them.
+' Therefore, checking for a minimum number of columns, rather than a total number, is better.
+' If no header row is detected, return -1
+Function QueryOutputHeaderRow(ws As Worksheet, Optional minimumColumnsExpected As Integer = 3) As Long
+    DebugPrint ("QueryOutputHeaderRow(" & ws.Name & ", " & minimumColumnsExpected & ")")
+    Dim lastRow As Long, headerRow As Long, r As Long
+    lastRow = FindLastRowInSheet(ws)
+    Debug.Print ("Last Row: " & lastRow)
+    
+    If lastRow = 1 Then
+        QueryOutputHeaderRow = 1
+        DebugPrint ("QueryOutputHeaderRow = 1")
+        Exit Function
+    End If
+    
+    rangeString = GetColumnLetterByNumber(minimumColumnsExpected) & "1:" & GetColumnLetterByNumber(minimumColumnsExpected) & lastRow
+    DebugPrint ("Checking Range: " & rangeString)
+    For Each c In ws.Range(rangeString)
+        If c.Value <> "" Then
+            DebugPrint ("QueryOutputHeaderRow = " & c.Row)
+            QueryOutputHeaderRow = c.Row
+            Exit Function
+        End If
+    Next c
+    QueryOutputHeaderRow = -1
+    
+    DebugPrint ("QueryOutputHeaderRow(): No Header Row Detected")
 End Function
 
 Public Function FindColumnByName(ws, columnName, Optional headerRow As Integer = 1) As Integer
