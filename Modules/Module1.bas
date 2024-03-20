@@ -1,4 +1,4 @@
-Public Function DebugPrint(log As String, Optional timeStamp As Boolean = True, Optional newLine As Boolean = True)
+Function DebugPrint(log As String, Optional timeStamp As Boolean = True, Optional newLine As Boolean = True)
     Dim filePath As String, dateFormat As String, logFileName As String
     Dim fs, f
     Const IOMODE = 8 ' ForAppending
@@ -28,7 +28,7 @@ Public Function DebugPrint(log As String, Optional timeStamp As Boolean = True, 
     f.Close
 End Function
 
-Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksheet
+Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksheet
     DebugPrint ("GetSheet(" & sheetName & ")")
     If wb Is Nothing Then Set wb = ThisWorkbook
     
@@ -54,7 +54,7 @@ Public Function GetSheet(sheetName As String, Optional wb As Workbook) As Worksh
     Set GetSheet = sheet
 End Function
 
-Public Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Worksheet
+Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Worksheet
     DebugPrint ("GetSheetLike(" & sheetName & ")")
     If wb Is Nothing Then Set wb = ThisWorkbook
     
@@ -76,13 +76,13 @@ Public Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Wo
     Set GetSheetLike = sheet
 End Function
 
-Public Function SetHeadersEJC(ws)
+Function SetHeadersEJC(ws)
     ' Set headers for EJC List
     ws.Range("A1").Value = "Empl ID"
     ws.Range("B1").Value = "Name (LN,FN)"
     ws.Range("C1").Value = "Job Code"
 End Function
-Public Function SetHeadersAppointed(ws)
+Function SetHeadersAppointed(ws)
     ' Add Headers to Appointed
     ws.Range("A1").Value = "Dept."
     ws.Range("B1").Value = "Class #"
@@ -133,7 +133,7 @@ Public Function SetHeadersAppointed(ws)
     ws.Range("AU1").Value = "Canceled Class"
 End Function
 
-Public Function SetHeadersHourly(ws)
+Function SetHeadersHourly(ws)
     ' Add Headers to Hourly
     ws.Range("A1").Value = "Item"
     ws.Range("B1").Value = "Course"
@@ -220,7 +220,7 @@ Public Function SetHeadersHourly(ws)
     ws.Range("BR1").Value = "Canceled Class"
 End Function
 
-Public Function GetColumnLetterByNumber(columnNumber) As String
+Function GetColumnLetterByNumber(columnNumber) As String
     ' Define array of columns
     Dim colArr(0 To 26) As String
     colArr(0) = ""
@@ -258,7 +258,7 @@ Public Function GetColumnLetterByNumber(columnNumber) As String
     
     GetColumnLetterByNumber = tensLetter & onesLetter
 End Function
-Public Function CopyRange(wsCopy, startColNumCopy, endColNumCopy, startRowNumCopy, endRowNumCopy, wsDest, startColNumDest, startRowNumDest)
+Function CopyRange(wsCopy, startColNumCopy, endColNumCopy, startRowNumCopy, endRowNumCopy, wsDest, startColNumDest, startRowNumDest)
     Dim rg As Range
     
     Set rg = wsCopy.Range(GetColumnLetterByNumber(startColNumCopy) & startRowNumCopy & ":" & GetColumnLetterByNumber(endColNumCopy) & endRowNumCopy)
@@ -266,7 +266,7 @@ Public Function CopyRange(wsCopy, startColNumCopy, endColNumCopy, startRowNumCop
     
 End Function
 
-Public Function FindLastRowInSheet(ws) As Long
+Function FindLastRowInSheet(ws) As Long
     ' based on https://stackoverflow.com/a/11169920
     Dim lastRow As Long
     
@@ -324,7 +324,7 @@ Function QueryOutputHeaderRow(ws As Worksheet, Optional minimumColumnsExpected A
     DebugPrint ("QueryOutputHeaderRow(): No Header Row Detected")
 End Function
 
-Public Function FindColumnByName(ws, columnName, Optional headerRow As Long = 1) As Integer
+Function FindColumnByName(ws, columnName, Optional headerRow As Long = 1) As Integer
     For Each c In ws.Range("A" & headerRow & ":ZZ" & headerRow)
         If c.Value = columnName Then
             FindColumnByName = c.Column
@@ -607,7 +607,7 @@ Sub GenerateEmployeeList()
     x = MsgBox("Employee/Job Code list has been generated.")
 End Sub
 
-Public Function GeneratePayrollSummarySheet(payPeriod As String)
+Function GeneratePayrollSummarySheet(payPeriod As String)
     Dim wsEJC As Worksheet, wsPeriod As Worksheet, wsAppointed As Worksheet, wsHourly As Worksheet, wsOther As Worksheet
     Dim lastRowEJC As Long
     
