@@ -718,3 +718,19 @@ Sub RemoveCanceledClasses()
     x = MsgBox("Canceled Classes removed.")
     DebugPrint ("RemoveCanceledClasses(): End.")
 End Sub
+
+Sub TestModule()
+    Debug.Print ("Running Tests... (" & Date & " " & Time & ")")
+    Debug.Print (Date & " " & Time & " - Running Tests on GetColumnLetterByNumber(columnNumber)")
+    Debug.Assert (GetColumnLetterByNumber(1) = "A")
+    Debug.Assert (GetColumnLetterByNumber(26 * 1) = "Z")
+    Debug.Assert (GetColumnLetterByNumber(27) = "AA")
+    Debug.Assert (GetColumnLetterByNumber(26 * 2) = "AZ")
+    Debug.Assert (GetColumnLetterByNumber(26 * 3) = "BZ")
+    Debug.Assert (GetColumnLetterByNumber(26 * 4) = "CZ")
+    Debug.Assert (GetColumnLetterByNumber(26 * 5) = "DZ")
+    Debug.Assert (GetColumnLetterByNumber(26 * 26) = "YZ")
+    Debug.Assert (GetColumnLetterByNumber(26 * 27) = "ZZ")
+    Debug.Print ("Tests Complete at " & Date & " " & Time)
+End Sub
+
