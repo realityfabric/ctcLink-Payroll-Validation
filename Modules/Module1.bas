@@ -253,8 +253,8 @@ Public Function GetColumnLetterByNumber(columnNumber) As String
     
     ' if the tensLetter is A and the onesLetter is B then: AB
     ' this will break if the column is bigger than ZZ
-    tensLetter = colArr(Int(columnNumber / 26))
-    onesLetter = colArr(columnNumber Mod 26)
+    tensLetter = colArr(Int((columnNumber - 1) / 26))
+    onesLetter = colArr(((columnNumber - 1) Mod 26) + 1)
     
     GetColumnLetterByNumber = tensLetter & onesLetter
 End Function
@@ -718,4 +718,3 @@ Sub RemoveCanceledClasses()
     x = MsgBox("Canceled Classes removed.")
     DebugPrint ("RemoveCanceledClasses(): End.")
 End Sub
-
