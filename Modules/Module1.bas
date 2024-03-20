@@ -324,7 +324,7 @@ Function QueryOutputHeaderRow(ws As Worksheet, Optional minimumColumnsExpected A
     DebugPrint ("QueryOutputHeaderRow(): No Header Row Detected")
 End Function
 
-Public Function FindColumnByName(ws, columnName, Optional headerRow As Integer = 1) As Integer
+Public Function FindColumnByName(ws, columnName, Optional headerRow As Long = 1) As Integer
     For Each c In ws.Range("A" & headerRow & ":ZZ" & headerRow)
         If c.Value = columnName Then
             FindColumnByName = c.Column
@@ -636,9 +636,11 @@ Public Function GeneratePayrollSummarySheet(payPeriod As String)
     cEmplHourly = FindColumnByName(wsHourly, "Empl ID")
     cJobCodeHourly = FindColumnByName(wsHourly, "Job Code")
     
-    cPayOther = FindColumnByName(wsOther, "Oth Earns", 2)
-    cEmplOther = FindColumnByName(wsOther, "ID", 2)
-    cJobCodeOther = FindColumnByName(wsOther, "Earn Code", 2)
+    Dim headerRowOther As Long
+    headerRowOther = QueryOutputHeaderRow(wsOther)
+    cPayOther = FindColumnByName(wsOther, "Oth Earns", headerRowOther)
+    cEmplOther = FindColumnByName(wsOther, "ID", headerRowOther)
+    cJobCodeOther = FindColumnByName(wsOther, "Earn Code", headerRowOther)
     
     For Each c In wsPeriod.Range("D2:D" & lastRow)
         c.Value = "=SUMIFS(" & wsAppointed.Name & "!" & GetColumnLetterByNumber(cPayAppointed) & ":" & GetColumnLetterByNumber(cPayAppointed) & ", " _
@@ -716,3 +718,4 @@ Sub RemoveCanceledClasses()
     x = MsgBox("Canceled Classes removed.")
     DebugPrint ("RemoveCanceledClasses(): End.")
 End Sub
+
