@@ -667,7 +667,7 @@ Function GeneratePayrollSummarySheet(payPeriod As String)
             & "C" & c.Row & ")"
     Next c
     For Each c In wsPeriod.Range("H2:H" & lastRow)
-        c.Value = "=G" & c.Row & " - F" & c.Row
+        c.Value = "=ROUND(G" & c.Row & " - F" & c.Row & ",2)"
     Next c
     For Each c In wsPeriod.Range("I2:I" & lastRow)
         c.Value = "=H" & c.Row & "<> 0"
