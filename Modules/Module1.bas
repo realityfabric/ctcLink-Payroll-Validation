@@ -664,7 +664,7 @@ Function GeneratePayrollSummarySheet(payPeriod As String)
             & wsOther.Name & "!" & GetColumnLetterByNumber(cEmplOther) & ":" & GetColumnLetterByNumber(cEmplOther) & ", " _
             & "TEXT(A" & c.Row & "," & Chr(34) & "0" & Chr(34) & "), " _
             & wsOther.Name & "!" & GetColumnLetterByNumber(cJobCodeOther) & ":" & GetColumnLetterByNumber(cJobCodeOther) & ", " _
-            & "C" & c.Row & "),4)"
+            & "TRIM(C" & c.Row & ")),4)"
     Next c
     For Each c In wsPeriod.Range("H2:H" & lastRow)
         c.Value = "=ROUND(G" & c.Row & " - F" & c.Row & ",2)"
