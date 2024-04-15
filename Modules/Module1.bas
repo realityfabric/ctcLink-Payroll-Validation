@@ -643,28 +643,28 @@ Function GeneratePayrollSummarySheet(payPeriod As String)
     cJobCodeOther = FindColumnByName(wsOther, "Earn Code", headerRowOther)
     
     For Each c In wsPeriod.Range("D2:D" & lastRow)
-        c.Value = "=SUMIFS(" & wsAppointed.Name & "!" & GetColumnLetterByNumber(cPayAppointed) & ":" & GetColumnLetterByNumber(cPayAppointed) & ", " _
+        c.Value = "=ROUND(SUMIFS(" & wsAppointed.Name & "!" & GetColumnLetterByNumber(cPayAppointed) & ":" & GetColumnLetterByNumber(cPayAppointed) & ", " _
             & wsAppointed.Name & "!" & GetColumnLetterByNumber(cEmplAppointed) & ":" & GetColumnLetterByNumber(cEmplAppointed) & ", " _
             & "TEXT(A" & c.Row & "," & Chr(34) & "0" & Chr(34) & "), " _
             & wsAppointed.Name & "!" & GetColumnLetterByNumber(cJobCodeAppointed) & ":" & GetColumnLetterByNumber(cJobCodeAppointed) & ", " _
-            & "C" & c.Row & ")"
+            & "C" & c.Row & "),4)"
     Next c
     For Each c In wsPeriod.Range("E2:E" & lastRow)
-        c.Value = "=SUMIFS(" & wsHourly.Name & "!" & GetColumnLetterByNumber(cPayHourly) & ":" & GetColumnLetterByNumber(cPayHourly) & ", " _
+        c.Value = "=ROUND(SUMIFS(" & wsHourly.Name & "!" & GetColumnLetterByNumber(cPayHourly) & ":" & GetColumnLetterByNumber(cPayHourly) & ", " _
             & wsHourly.Name & "!" & GetColumnLetterByNumber(cEmplHourly) & ":" & GetColumnLetterByNumber(cEmplHourly) & ", " _
             & "TEXT(A" & c.Row & "," & Chr(34) & "0" & Chr(34) & "), " _
             & wsHourly.Name & "!" & GetColumnLetterByNumber(cJobCodeHourly) & ":" & GetColumnLetterByNumber(cJobCodeHourly) & ", " _
-            & "C" & c.Row & ")"
+            & "C" & c.Row & "),4)"
     Next c
     For Each c In wsPeriod.Range("F2:F" & lastRow)
         c.Value = "=SUM(D" & c.Row & ":E" & c.Row & ")"
     Next c
     For Each c In wsPeriod.Range("G2:G" & lastRow)
-        c.Value = "=SUMIFS(" & wsOther.Name & "!" & GetColumnLetterByNumber(cPayOther) & ":" & GetColumnLetterByNumber(cPayOther) & ", " _
+        c.Value = "=ROUND(SUMIFS(" & wsOther.Name & "!" & GetColumnLetterByNumber(cPayOther) & ":" & GetColumnLetterByNumber(cPayOther) & ", " _
             & wsOther.Name & "!" & GetColumnLetterByNumber(cEmplOther) & ":" & GetColumnLetterByNumber(cEmplOther) & ", " _
             & "TEXT(A" & c.Row & "," & Chr(34) & "0" & Chr(34) & "), " _
             & wsOther.Name & "!" & GetColumnLetterByNumber(cJobCodeOther) & ":" & GetColumnLetterByNumber(cJobCodeOther) & ", " _
-            & "C" & c.Row & ")"
+            & "C" & c.Row & "),4)"
     Next c
     For Each c In wsPeriod.Range("H2:H" & lastRow)
         c.Value = "=ROUND(G" & c.Row & " - F" & c.Row & ",2)"
