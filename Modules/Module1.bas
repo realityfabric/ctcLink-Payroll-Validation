@@ -342,7 +342,7 @@ Sub RefreshData()
     Dim destAppointed As Worksheet, destHourly As Worksheet, destOther As Worksheet, destEJC As Worksheet
     Dim copyAppointed As Worksheet, copyHourly As Worksheet, copyOther As Worksheet
     Dim copyLastRow As Long, destLastRow As Long
-    Dim msg_string As String
+    Dim msgString As String
         
     ' Ask if clearing Existing Data is acceptable
         ' If No: Exit Macro
@@ -437,28 +437,28 @@ Sub RefreshData()
                         Exit For
                     End If
                     dest_head = -1 ' -1 is an impossible column, indicating failure
-                    msg_string = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msg_string will be updated if match is detected
+                    msgString = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msgString will be updated if match is detected
                     
                     For Each c In destAppointed.Range("A1:CZ1")
                         If copy_val = c.Value Then
-                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
                             dest_head = c.Column
                         ElseIf Left(copy_val, 3) = c.Value Then
-                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
                             dest_head = c.Column
                         End If
                     Next c
                     
-                    If Len(msg_string) < 40 Then
-                        x = DebugPrint(msg_string & vbTab & vbTab & vbTab, False, False)
-                    ElseIf Len(msg_string) < 44 Then
-                        x = DebugPrint(msg_string & vbTab & vbTab, False, False)
+                    If Len(msgString) < 40 Then
+                        x = DebugPrint(msgString & vbTab & vbTab & vbTab, False, False)
+                    ElseIf Len(msgString) < 44 Then
+                        x = DebugPrint(msgString & vbTab & vbTab, False, False)
                     Else
-                        x = DebugPrint(msg_string & vbTab, False, False)
+                        x = DebugPrint(msgString & vbTab, False, False)
                     End If
                     
                     If dest_head = -1 Then
-                        mb = MsgBox(msg_string, vbCritical)
+                        mb = MsgBox(msgString, vbCritical)
                     Else
                         ' Starting at first (fully) blank row in This Workbook:
                         ' Copy Column A to This Workbook in correct column
@@ -492,35 +492,35 @@ Sub RefreshData()
                         Exit For
                     End If
                     dest_head = -1 ' -1 is an impossible column, indicating failure
-                    msg_string = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msg_string will be updated if match is detected
+                    msgString = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msgString will be updated if match is detected
                     
                     For Each c In destHourly.Range("A1:CZ1")
                         If copy_val = c.Value Then
-                            msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
                             dest_head = c.Column
                         ElseIf Right(c.Value, 5) = "Hours" Then
                             If Left(copy_val, 3) = Left(c.Value, 3) Then
-                                msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                                msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
                                 dest_head = c.Column
                             End If
                         ElseIf Right(c.Value, 3) = "Pay" Then
                             If copy_val = "$ " & Left(c.Value, 3) & " $" Then
-                                msg_string = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                                msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
                                 dest_head = c.Column
                             End If
                         End If
                     Next c
                     
-                    If Len(msg_string) < 40 Then
-                        x = DebugPrint(msg_string & vbTab & vbTab & vbTab, False, False)
-                    ElseIf Len(msg_string) < 44 Then
-                        x = DebugPrint(msg_string & vbTab & vbTab, False, False)
+                    If Len(msgString) < 40 Then
+                        x = DebugPrint(msgString & vbTab & vbTab & vbTab, False, False)
+                    ElseIf Len(msgString) < 44 Then
+                        x = DebugPrint(msgString & vbTab & vbTab, False, False)
                     Else
-                        x = DebugPrint(msg_string & vbTab, False, False)
+                        x = DebugPrint(msgString & vbTab, False, False)
                     End If
                     
                     If dest_head = -1 Then
-                        mb = MsgBox(msg_string, vbCritical)
+                        mb = MsgBox(msgString, vbCritical)
                     Else
                         ' Starting at first (fully) blank row in This Workbook:
                         ' Copy Column A to This Workbook in correct column
