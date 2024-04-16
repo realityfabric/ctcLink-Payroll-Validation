@@ -760,6 +760,27 @@ Function TestCleanWorkbook() As Boolean
     Debug.Print Date & " " & Time & " - TestCleanWorkbook() Completed Successfully."
 End Function
 
+Function TestGetSheet() As Boolean
+    Debug.Print (Date & " " & Time & " - TestGetSheet()")
+    TestGetSheet = False
+    
+    x = TestCleanWorkbook()
+    x = CleanWorkbook()
+    
+    Dim wb As Workbook, ws As Worksheet, tws1 As Worksheet, tws2 As Worksheet
+    Set wb = ThisWorkbook
+        
+    Set tws1 = GetSheet("Test WS 1")
+    Debug.Assert tws1.Name = "Test WS 1"
+    Debug.Assert wb.Sheets.Count = 2
+    Set tws2 = GetSheet("Test WS 2")
+    Debug.Assert tws2.Name = "Test WS 2"
+    Debug.Assert wb.Sheets.Count = 3
+    
+    Debug.Print (Date & " " & Time & " - TestGetSheet() Completed Successfully.")
+    TestGetSheet = True
+End Function
+
 Sub TestModule()
     Dim counter As Integer
     counter = 0
