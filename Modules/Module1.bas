@@ -720,6 +720,15 @@ Sub RemoveCanceledClasses()
     DebugPrint ("RemoveCanceledClasses(): End.")
 End Sub
 
+Function CleanWorkbook()
+    Dim ws As Worksheet
+    Application.DisplayAlerts = False
+    For Each ws In ThisWorkbook.Worksheets
+        If ws.Name <> "Start Here" Then ws.Delete
+    Next
+    Application.DisplayAlerts = True
+End Function
+
 Function TestGetColumnLetterByNumber() As Boolean
     TestGetColumnLetterByNumber = False
     Debug.Print (Date & " " & Time & " - TestGetColumnLetterByNumber()")
@@ -739,6 +748,8 @@ End Function
 Sub TestModule()
     Dim counter As Integer
     counter = 0
+    Debug.Print "Deleting Worksheets."
+    x = CleanWorkbook()
     Debug.Print ("Running Tests... (" & Date & " " & Time & ")")
     If TestGetColumnLetterByNumber() Then counter = counter + 1
     Debug.Print (Date & " " & Time & " - Completed " & counter & " tests successfully.")
