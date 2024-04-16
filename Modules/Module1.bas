@@ -342,6 +342,7 @@ Sub RefreshData()
     Dim destAppointed As Worksheet, destHourly As Worksheet, destOther As Worksheet, destEJC As Worksheet
     Dim copyAppointed As Worksheet, copyHourly As Worksheet, copyOther As Worksheet
     Dim copyLastRow As Long, destLastRow As Long
+    Dim msg_string As String
         
     ' Ask if clearing Existing Data is acceptable
         ' If No: Exit Macro
