@@ -61,7 +61,7 @@ Function GetSheetLike(sheetName As String, Optional wb As Workbook) As Worksheet
     Dim ws As Worksheet, sheet As Worksheet
     Set sheet = Nothing
     For Each ws In wb.Sheets
-        If ws.Name Like sheetName Then
+        If LCase(ws.Name) Like LCase(sheetName) Then
             DebugPrint ("Found: " & ws.Name & " Like " & sheetName)
             Set sheet = ws
             Set GetSheetLike = ws
