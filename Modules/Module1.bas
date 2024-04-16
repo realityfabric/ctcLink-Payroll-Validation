@@ -763,8 +763,6 @@ End Function
 Function TestGetSheet() As Boolean
     Debug.Print (Date & " " & Time & " - TestGetSheet()")
     TestGetSheet = False
-    
-    x = TestCleanWorkbook()
     x = CleanWorkbook()
     
     Dim wb As Workbook, ws As Worksheet, tws1 As Worksheet, tws2 As Worksheet
@@ -781,12 +779,95 @@ Function TestGetSheet() As Boolean
     TestGetSheet = True
 End Function
 
+Function TestGetSheetLike_SheetFound() As Boolean
+    Debug.Print Date & " " & Time & " - TestGetSheetLike_SheetFound()"
+    TestGetSheetLike_SheetFound = False
+    
+    x = CleanWorkbook()
+    
+    Dim wb As Workbook, ws As Worksheet
+    Set wb = ThisWorkbook
+    
+    Set ws = wb.Sheets.Add(After:=wb.Sheets(wb.Sheets.Count))
+    ws.Name = "Test WS 1"
+    Set ws = Nothing
+    Debug.Assert ws Is Nothing
+    
+    Set ws = GetSheetLike("Test WS 1")
+    Debug.Assert ws.Name = "Test WS 1"
+    Set ws = Nothing
+    Debug.Assert ws Is Nothing
+    
+    Set ws = GetSheetLike("Test*")
+    Debug.Assert ws.Name = "Test WS 1"
+    Set ws = Nothing
+    Debug.Assert ws Is Nothing
+
+    Set ws = GetSheetLike("*Test*")
+    Debug.Assert ws.Name = "Test WS 1"
+    Set ws = Nothing
+    Debug.Assert ws Is Nothing
+   
+    x = CleanWorkbook()
+    
+    TestGetSheetLike_SheetFound = True
+    Debug.Print Date & " " & Time & " - TestGetSheetLike_SheetFound() Completed Successfully."
+End Function
+
+Function TestGetSheetLike_SheetNotFound() As Boolean
+    TestGetSheetLike_SheetNotFound = False
+    
+    x = CleanWorkbook()
+    Dim ws As Worksheet
+    Set ws = GetSheetLike("This Will Fail")
+    Debug.Assert ws Is Nothing
+    
+    TestGetSheetLike_SheetNotFound = True
+End Function
+
+Function TestGetSheetLike_CapitalizationMismatch() As Boolean
+    Debug.Print Date & " " & Time & " - TestGetSheetLike_CapitalizationMismatch()"
+    TestGetSheetLike_CapitalizationMismatch = False
+    
+    x = CleanWorkbook()
+    Dim wb As Workbook, ws As Worksheet
+    Set wb = ThisWorkbook
+    
+    Set ws = wb.Sheets.Add(After:=wb.Sheets(wb.Sheets.Count))
+    ws.Name = "Test WS 1"
+    Set ws = Nothing
+    Debug.Assert ws Is Nothing
+    
+    Set ws = GetSheetLike("TEST WS 1")
+    Debug.Assert Not ws Is Nothing
+    Debug.Assert ws.Name = "Test WS 1"
+    Set ws = Nothing
+    
+    x = CleanWorkbook()
+    
+    TestGetSheetLike_CapitalizationMismatch = True
+    Debug.Print Date & " " & Time & " - TestGetSheetLike_CapitalizationMismatch() Completed Successfully."
+End Function
+
 Sub TestModule()
     Dim counter As Integer
     counter = 0
     Debug.Print "Deleting Worksheets."
     x = CleanWorkbook()
     Debug.Print ("Running Tests... (" & Date & " " & Time & ")")
-    If TestGetColumnLetterByNumber() Then counter = counter + 1
+    
+    Debug.Assert TestCleanWorkbook()
+    counter = counter + 1
+    Debug.Assert TestGetSheet()
+    counter = counter + 1
+    Debug.Assert TestGetSheetLike_SheetFound()
+    counter = counter + 1
+    Debug.Assert TestGetSheetLike_SheetNotFound()
+    counter = counter + 1
+    Debug.Assert TestGetSheetLike_CapitalizationMismatch()
+    counter = counter + 1
+    Debug.Assert TestGetColumnLetterByNumber()
+    counter = counter + 1
+    
     Debug.Print (Date & " " & Time & " - Completed " & counter & " tests successfully.")
 End Sub
