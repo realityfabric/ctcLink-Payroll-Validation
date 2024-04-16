@@ -504,7 +504,7 @@ Sub RefreshData()
                                 dest_head = c.Column
                             End If
                         ElseIf Right(c.Value, 3) = "Pay" Then
-                            If copyVal = "$ " & Left(c.Value, 3) & " $" Then
+                            If copyVal Like "$*" & Left(c.Value, 3) & "*$" Then
                                 msgString = "Column " & a & "(" & copyVal & ") matched with Column " & c.Column & "."
                                 dest_head = c.Column
                             End If
