@@ -720,9 +720,9 @@ Sub RemoveCanceledClasses()
     DebugPrint ("RemoveCanceledClasses(): End.")
 End Sub
 
-Sub TestModule()
-    Debug.Print ("Running Tests... (" & Date & " " & Time & ")")
-    Debug.Print (Date & " " & Time & " - Running Tests on GetColumnLetterByNumber(columnNumber)")
+Function TestGetColumnLetterByNumber() As Boolean
+    TestGetColumnLetterByNumber = False
+    Debug.Print (Date & " " & Time & " - TestGetColumnLetterByNumber()")
     Debug.Assert (GetColumnLetterByNumber(1) = "A")
     Debug.Assert (GetColumnLetterByNumber(26 * 1) = "Z")
     Debug.Assert (GetColumnLetterByNumber(27) = "AA")
@@ -732,6 +732,15 @@ Sub TestModule()
     Debug.Assert (GetColumnLetterByNumber(26 * 5) = "DZ")
     Debug.Assert (GetColumnLetterByNumber(26 * 26) = "YZ")
     Debug.Assert (GetColumnLetterByNumber(26 * 27) = "ZZ")
-    Debug.Print ("Tests Complete at " & Date & " " & Time)
+    Debug.Print (Date & "" & Time & " - TestColumnLetterByNumber() Completed Successfully.")
+    TestGetColumnLetterByNumber = True
+End Function
+
+Sub TestModule()
+    Dim counter As Integer
+    counter = 0
+    Debug.Print ("Running Tests... (" & Date & " " & Time & ")")
+    If TestGetColumnLetterByNumber() Then counter = counter + 1
+    Debug.Print (Date & " " & Time & " - Completed " & counter & " tests successfully.")
 End Sub
 
