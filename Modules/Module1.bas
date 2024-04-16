@@ -431,20 +431,20 @@ Sub RefreshData()
                 For i = 1 To 70
                     a = GetColumnLetterByNumber(i)
                     x = DebugPrint("Scanning Column " & a & "..." & vbTab, True, False)
-                    copy_val = copyAppointed.Range(a & "1").Value
-                    If copy_val = "" Then
+                    copyVal = copyAppointed.Range(a & "1").Value
+                    If copyVal = "" Then
                         x = DebugPrint("Blank Column Detected, Moving to Copy Step..." & vbTab, False, True)
                         Exit For
                     End If
                     dest_head = -1 ' -1 is an impossible column, indicating failure
-                    msgString = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msgString will be updated if match is detected
+                    msgString = "Column " & a & " (" & copyVal & "): No Match Detected!!!" ' msgString will be updated if match is detected
                     
                     For Each c In destAppointed.Range("A1:CZ1")
-                        If copy_val = c.Value Then
-                            msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                        If copyVal = c.Value Then
+                            msgString = "Column " & a & "(" & copyVal & ") matched with Column " & c.Column & "."
                             dest_head = c.Column
-                        ElseIf Left(copy_val, 3) = c.Value Then
-                            msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                        ElseIf Left(copyVal, 3) = c.Value Then
+                            msgString = "Column " & a & "(" & copyVal & ") matched with Column " & c.Column & "."
                             dest_head = c.Column
                         End If
                     Next c
@@ -486,26 +486,26 @@ Sub RefreshData()
                 For i = 1 To 70
                     a = GetColumnLetterByNumber(i)
                     x = DebugPrint("Scanning Column " & a & "..." & vbTab, True, False)
-                    copy_val = copyHourly.Range(a & "1").Value
-                    If copy_val = "" Then
+                    copyVal = copyHourly.Range(a & "1").Value
+                    If copyVal = "" Then
                         x = DebugPrint("Blank Column Detected, Moving to Copy Step..." & vbTab, False, True)
                         Exit For
                     End If
                     dest_head = -1 ' -1 is an impossible column, indicating failure
-                    msgString = "Column " & a & " (" & copy_val & "): No Match Detected!!!" ' msgString will be updated if match is detected
+                    msgString = "Column " & a & " (" & copyVal & "): No Match Detected!!!" ' msgString will be updated if match is detected
                     
                     For Each c In destHourly.Range("A1:CZ1")
-                        If copy_val = c.Value Then
-                            msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                        If copyVal = c.Value Then
+                            msgString = "Column " & a & "(" & copyVal & ") matched with Column " & c.Column & "."
                             dest_head = c.Column
                         ElseIf Right(c.Value, 5) = "Hours" Then
-                            If Left(copy_val, 3) = Left(c.Value, 3) Then
-                                msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            If Left(copyVal, 3) = Left(c.Value, 3) Then
+                                msgString = "Column " & a & "(" & copyVal & ") matched with Column " & c.Column & "."
                                 dest_head = c.Column
                             End If
                         ElseIf Right(c.Value, 3) = "Pay" Then
-                            If copy_val = "$ " & Left(c.Value, 3) & " $" Then
-                                msgString = "Column " & a & "(" & copy_val & ") matched with Column " & c.Column & "."
+                            If copyVal = "$ " & Left(c.Value, 3) & " $" Then
+                                msgString = "Column " & a & "(" & copyVal & ") matched with Column " & c.Column & "."
                                 dest_head = c.Column
                             End If
                         End If
