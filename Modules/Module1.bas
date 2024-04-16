@@ -324,13 +324,13 @@ Function QueryOutputHeaderRow(ws As Worksheet, Optional minimumColumnsExpected A
     DebugPrint ("QueryOutputHeaderRow(): No Header Row Detected")
 End Function
 
-Function FindColumnByName(ws, columnName, Optional headerRow As Long = 1) As Integer
+Function GetColumnNumberByName(ws, columnName, Optional headerRow As Long = 1) As Integer
     For Each c In ws.Range("A" & headerRow & ":ZZ" & headerRow)
         If c.Value = columnName Then
-            FindColumnByName = c.Column
+            GetColumnNumberByName = c.Column
             Exit For
         Else
-            FindColumnByName = -1
+            GetColumnNumberByName = -1
         End If
     Next c
 End Function
@@ -563,15 +563,15 @@ Sub GenerateEmployeeList()
     lastRowHourly = FindLastRowInSheet(wsHourly)
     lastRowEJC = FindLastRowInSheet(wsEJC)
     
-    emplColAppointed = FindColumnByName(wsAppointed, "Empl ID")
-    emplColHourly = FindColumnByName(wsHourly, "Empl ID")
-    emplColEJC = FindColumnByName(wsEJC, "Empl ID")
-    nameColAppointed = FindColumnByName(wsAppointed, "Name (LN,FN)")
-    nameColHourly = FindColumnByName(wsHourly, "Name (LN,FN)")
-    nameColEJC = FindColumnByName(wsEJC, "Name (LN,FN)")
-    jobcodeAppointed = FindColumnByName(wsAppointed, "Job Code")
-    jobcodeHourly = FindColumnByName(wsHourly, "Job Code")
-    jobcodeEJC = FindColumnByName(wsEJC, "Job Code")
+    emplColAppointed = GetColumnNumberByName(wsAppointed, "Empl ID")
+    emplColHourly = GetColumnNumberByName(wsHourly, "Empl ID")
+    emplColEJC = GetColumnNumberByName(wsEJC, "Empl ID")
+    nameColAppointed = GetColumnNumberByName(wsAppointed, "Name (LN,FN)")
+    nameColHourly = GetColumnNumberByName(wsHourly, "Name (LN,FN)")
+    nameColEJC = GetColumnNumberByName(wsEJC, "Name (LN,FN)")
+    jobcodeAppointed = GetColumnNumberByName(wsAppointed, "Job Code")
+    jobcodeHourly = GetColumnNumberByName(wsHourly, "Job Code")
+    jobcodeEJC = GetColumnNumberByName(wsEJC, "Job Code")
     
     ' Copy wsAppointed
     DebugPrint ("Copying wsAppointed to " & wsEJC.Name)
@@ -629,19 +629,19 @@ Function GeneratePayrollSummarySheet(payPeriod As String)
     wsPeriod.Range("H1").Value = "DIFF"
     wsPeriod.Range("I1").Value = "Has Difference?"
     
-    cPayAppointed = FindColumnByName(wsAppointed, payPeriod)
-    cEmplAppointed = FindColumnByName(wsAppointed, "Empl ID")
-    cJobCodeAppointed = FindColumnByName(wsAppointed, "Job Code")
+    cPayAppointed = GetColumnNumberByName(wsAppointed, payPeriod)
+    cEmplAppointed = GetColumnNumberByName(wsAppointed, "Empl ID")
+    cJobCodeAppointed = GetColumnNumberByName(wsAppointed, "Job Code")
     
-    cPayHourly = FindColumnByName(wsHourly, payPeriod & " Pay")
-    cEmplHourly = FindColumnByName(wsHourly, "Empl ID")
-    cJobCodeHourly = FindColumnByName(wsHourly, "Job Code")
+    cPayHourly = GetColumnNumberByName(wsHourly, payPeriod & " Pay")
+    cEmplHourly = GetColumnNumberByName(wsHourly, "Empl ID")
+    cJobCodeHourly = GetColumnNumberByName(wsHourly, "Job Code")
     
     Dim headerRowOther As Long
     headerRowOther = QueryOutputHeaderRow(wsOther)
-    cPayOther = FindColumnByName(wsOther, "Oth Earns", headerRowOther)
-    cEmplOther = FindColumnByName(wsOther, "ID", headerRowOther)
-    cJobCodeOther = FindColumnByName(wsOther, "Earn Code", headerRowOther)
+    cPayOther = GetColumnNumberByName(wsOther, "Oth Earns", headerRowOther)
+    cEmplOther = GetColumnNumberByName(wsOther, "ID", headerRowOther)
+    cJobCodeOther = GetColumnNumberByName(wsOther, "Earn Code", headerRowOther)
     
     For Each c In wsPeriod.Range("D2:D" & lastRow)
         c.Value = "=ROUND(SUMIFS(" & wsAppointed.Name & "!" & GetColumnLetterByNumber(cPayAppointed) & ":" & GetColumnLetterByNumber(cPayAppointed) & ", " _
@@ -693,8 +693,8 @@ Sub RemoveCanceledClasses()
     lastRowAppointed = FindLastRowInSheet(wsAppointed)
     lastRowHourly = FindLastRowInSheet(wsHourly)
 
-    colCanceledAppointed = FindColumnByName(wsAppointed, "Canceled Class")
-    colCanceledHourly = FindColumnByName(wsHourly, "Canceled Class")
+    colCanceledAppointed = GetColumnNumberByName(wsAppointed, "Canceled Class")
+    colCanceledHourly = GetColumnNumberByName(wsHourly, "Canceled Class")
     
     DebugPrint ("Appointed: Deleting Rows with Canceled Classes...")
     Dim r As Long ' r will store the row in the upcoming loop
@@ -754,4 +754,3 @@ Sub TestModule()
     If TestGetColumnLetterByNumber() Then counter = counter + 1
     Debug.Print (Date & " " & Time & " - Completed " & counter & " tests successfully.")
 End Sub
-
