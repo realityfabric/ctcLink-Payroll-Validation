@@ -745,6 +745,21 @@ Function TestGetColumnLetterByNumber() As Boolean
     TestGetColumnLetterByNumber = True
 End Function
 
+Function TestCleanWorkbook() As Boolean
+    Debug.Print Date & " " & Time & " - TestCleanWorkbook()"
+    TestCleanWorkbook = False
+    
+    x = CleanWorkbook()
+    
+    Dim ws As Worksheet
+    For Each ws In ThisWorkbook.Sheets
+        Debug.Assert ws.Name = "Start Here"
+    Next ws
+    
+    TestCleanWorkbook = True
+    Debug.Print Date & " " & Time & " - TestCleanWorkbook() Completed Successfully."
+End Function
+
 Sub TestModule()
     Dim counter As Integer
     counter = 0
